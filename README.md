@@ -1,45 +1,47 @@
 # SITRAC — Sistema Inteligente de Transporte y Gestión de Rutas
 
-Proyecto académico en C++ para administrar pasajeros, ciudades, rutas y solicitudes de viaje.
+Proyecto de Estructura de Datos en C++.
 
 ## Funcionalidades
-1. Gestión de pasajeros: registrar, listar, buscar por ID y eliminar.
-2. Gestión de ciudades y rutas: agregar ciudades, crear rutas bidireccionales y consultar conexiones directas.
-3. Solicitudes de viaje: crear solicitudes, ver la cola y atender la siguiente.
-4. Consultas y reportes: pasajeros, red de rutas, solicitudes e historial.
-5. Persistencia: guardar y cargar información en el archivo sitrac_datos.txt.
-6. Validaciones: documentos duplicados, IDs inexistentes, ciudades repetidas y solicitudes sin pasajero o sin conexión directa.
+- Menú principal persistente: Ciudades, Rutas, Pasajeros, Cola, Historial, Búsquedas, Reportes, Guardar/cargar y Salir.
+- Submenús con opción Volver.
+- Lista enlazada propia de pasajeros: insertar, buscar, actualizar, eliminar y listar.
+- Grafo de ciudades con listas de adyacencia: alta/baja de ciudades y conexiones, consulta de vecinos y conexiones directas.
+- Cola enlazada propia de solicitudes: encolar, atender y mostrar frente.
+- Historial de operaciones y persistencia en archivo de texto.
 
-## Estructuras de datos
-- Lista simplemente enlazada propia para pasajeros.
-- Grafo ponderado con listas de adyacencia para ciudades y distancias.
-- Cola simplemente enlazada FIFO para solicitudes.
-- Vector para historial y listas de adyacencia.
-
-## Compilación
-Requiere un compilador C++14.
-
-Linux / macOS:
-~~~bash
-g++ -std=c++14 -Wall -Wextra -pedantic src/main.cpp -o sitrac
-./sitrac
-~~~
+## Compilar y ejecutar
+Se necesita un compilador C++14.
 
 Windows con MinGW:
-~~~bash
+```bash
 g++ -std=c++14 -Wall -Wextra -pedantic src/main.cpp -o sitrac.exe
 sitrac.exe
-~~~
+```
 
-El archivo sitrac_datos.txt se crea en el directorio desde el que se ejecuta el programa. Usa la opción 5 para guardar y la opción 6 para cargar.
+Linux/macOS:
+```bash
+g++ -std=c++14 -Wall -Wextra -pedantic src/main.cpp -o sitrac
+./sitrac
+```
 
-## Archivos
-- src/main.cpp: código fuente.
-- docs/DIAGRAMA_Y_ESTRUCTURAS.md: diseño y explicación de estructuras.
-- docs/PRUEBAS.md: plan y registro de pruebas.
+El archivo sitrac_datos.txt se crea en la carpeta desde la que se ejecuta el programa. En el menú, elige 8 y luego 1 para guardar o 2 para cargar.
 
-## Alcance
-La versión actual verifica conexiones directas entre ciudades; todavía no calcula el camino más corto entre varias ciudades. El archivo de datos utiliza el carácter | como separador, por lo que los campos no deben contener ese carácter. Ejecuta y registra las pruebas antes de entregar.
+## Estructuras y justificación
+| Operación | Estructura | Justificación |
+|---|---|---|
+| Pasajeros | Lista simplemente enlazada propia | Inserción y eliminación de nodos sin std::list |
+| Ciudades y rutas | Grafo con listas de adyacencia | Representa vecinos y distancias entre ciudades |
+| Solicitudes | Cola enlazada propia | Atención FIFO, sin std::queue |
+| Historial | vector<string> | Conserva eventos en orden de ocurrencia |
 
-## Autor
-Juan Esteban Benito Bernal
+## Organización
+- src/main.cpp: implementación modular mediante clases.
+- docs/DIAGRAMA_Y_ESTRUCTURAS.md: arquitectura y explicación.
+- docs/PRUEBAS.md: casos de prueba y registro real de resultados.
+
+## Uso de IA
+Se utilizó ChatGPT como apoyo para estructurar, revisar y corregir partes del código y la documentación. El estudiante debe compilar, ejecutar, revisar y comprender cada módulo, corregir lo que encuentre y poder explicar las decisiones de implementación durante la sustentación.
+
+## Alcance conocido
+La búsqueda de rutas consulta conexiones directas; no calcula todavía la ruta más corta entre varias ciudades. Los campos de texto guardados no deben contener el separador |.
