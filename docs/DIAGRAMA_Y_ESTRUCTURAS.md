@@ -1,37 +1,30 @@
-# Diseño y estructuras de SITRAC
+# Diagrama modular y estructuras de SITRAC
 
-## Diagrama general
+## Diagrama
 ~~~text
-                 +----------------------+
-                 |    MENU PRINCIPAL    |
-                 +----------+-----------+
-                            |
-       +--------------------+--------------------+
-       |                    |                    |
-+------v-------+    +-------v--------+   +-------v--------+
-|  Pasajeros   |    | Ciudades/rutas |   | Solicitudes    |
-| Lista enlaz. |    | Grafo ponderado|   | Cola enlazada  |
-+------+-------+    +-------+--------+   +-------+--------+
-       |                    |                    |
-       +--------------------+--------------------+
-                            |
-                 +----------v-----------+
-                 | Consultas y reportes |
-                 | Historial / archivos |
-                 +----------------------+
+                         MENU PRINCIPAL
+                               |
+       +-----------+-----------+-----------+-----------+
+       |           |           |           |           |
+    CIUDADES     RUTAS     PASAJEROS      COLA      HISTORIAL
+       |           |           |           |           |
+       +-----------+-----------+-----------+-----------+
+                               |
+                 BUSQUEDAS / REPORTES / ARCHIVOS
+                               |
+                    sitrac_datos.txt
 ~~~
 
-## Lista simplemente enlazada
-Cada nodo de pasajero contiene ID, nombre, documento, teléfono y puntero al siguiente nodo. Permite insertar, recorrer, buscar por ID y eliminar. Se valida que el documento no esté repetido y se libera la memoria al destruir la lista.
+## Tabla de estructuras
+| Operación | Estructura usada | Justificación |
+|---|---|---|
+| Insertar/listar/buscar/actualizar/eliminar pasajeros | Lista simplemente enlazada propia | Cada pasajero es un nodo enlazado; permite gestionar memoria dinámica |
+| Registrar ciudades y consultar conexiones | Grafo con listas de adyacencia | Cada ciudad es vértice y cada ruta es arista con peso en kilómetros |
+| Agregar/quitar rutas | Listas de adyacencia | Actualiza la conexión en ambos sentidos |
+| Eliminar ciudad | Grafo y recorrido de adyacencias | Elimina aristas incidentes y reajusta índices para evitar referencias colgantes |
+| Encolar/atender solicitudes | Cola enlazada propia | Mantiene FIFO: primero en entrar, primero en salir |
+| Historial | vector<string> | Mantiene los eventos en orden de llegada |
+| Guardar/cargar | Archivo de texto | Permite persistencia básica de los registros |
 
-## Grafo ponderado
-Las ciudades son vértices y las rutas son aristas con distancia en kilómetros. Cada ciudad conserva una lista de adyacencia. Las rutas se agregan en ambos sentidos, por lo que el grafo es no dirigido. La versión actual consulta conexiones directas; no calcula caminos mínimos.
-
-## Cola enlazada FIFO
-Cada solicitud guarda código, ID del pasajero, origen, destino y puntero siguiente. Se inserta al final y se atiende desde el frente, respetando primero en entrar, primero en salir.
-
-## Historial y persistencia
-El historial se guarda en un vector. Los registros se almacenan en sitrac_datos.txt con identificadores de tipo P (pasajero), C (ciudad), R (ruta), S (solicitud) y H (historial). La carga reconstruye los registros válidos.
-
-## Integración
-Una solicitud solo se acepta cuando existe el pasajero y se ha registrado una conexión directa entre las ciudades de origen y destino.
+## Contrato del menú
+1 Ciudades, 2 Rutas, 3 Pasajeros, 4 Cola, 5 Historial, 6 Búsquedas, 7 Reportes, 8 Guardar/cargar y 0 Salir. Todos los submenús ofrecen Volver.
