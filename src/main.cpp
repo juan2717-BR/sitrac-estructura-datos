@@ -109,7 +109,8 @@ class ColaSolicitudes{
     Solicitud*frente,*final;
 public:
     ColaSolicitudes():frente(nullptr),final(nullptr){}
-    ~ColaSolicitudes(){while(frente){Solicitud*p=frente;frente=frente->sig;delete p;}}
+    ~ColaSolicitudes(){limpiar();}
+    void limpiar(){while(frente){Solicitud*p=frente;frente=frente->sig;delete p;}final=nullptr;}
     bool vacia()const{return frente==nullptr;}
     void encolar(int c,int p,const string&o,const string&d){Solicitud*n=new Solicitud(c,p,o,d);if(final)final->sig=n;else frente=n;final=n;}
     bool atender(Solicitud&salida){if(vacia())return false;Solicitud*p=frente;salida.codigo=p->codigo;salida.pasajeroId=p->pasajeroId;salida.origen=p->origen;salida.destino=p->destino;frente=frente->sig;if(!frente)final=nullptr;delete p;return true;}
@@ -175,7 +176,7 @@ class SITRAC{
     void cargar(){
         ifstream f("sitrac_datos.txt");if(!f){cout<<"No existe sitrac_datos.txt.\n";return;}
         // Evita duplicar datos si el usuario intenta cargar mas de una vez.
-        pasajeros.limpiar();grafo=GrafoCiudades();cola=ColaSolicitudes();historial.clear();siguientePasajero=1;siguienteSolicitud=1;
+        pasajeros.limpiar();grafo=GrafoCiudades();cola.limpiar();historial.clear();siguientePasajero=1;siguienteSolicitud=1;
         string linea;int total=0;
         while(getline(f,linea)){stringstream ss(linea);string tipo;getline(ss,tipo,'|');
             if(tipo=="P"){string si,n,d,t;getline(ss,si,'|');getline(ss,n,'|');getline(ss,d,'|');getline(ss,t);try{int id=stoi(si);if(pasajeros.insertar(id,n,d,t)){siguientePasajero=max(siguientePasajero,id+1);++total;}}catch(...){}}
