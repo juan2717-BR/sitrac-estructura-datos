@@ -92,7 +92,10 @@ public:
     }
     bool conectadas(const string&a,const string&b)const{
         int x=indice(a),y=indice(b);if(x<0||y<0)return false;
-        for(const Arista&e:ciudades[x].adyacencia)if(e.destino==y)return true;return false;
+        for(const Arista& e : ciudades[x].adyacencia){
+            if(e.destino==y) return true;
+        }
+        return false;
     }
     void mostrarCiudades()const{if(ciudades.empty()){cout<<"No hay ciudades.\n";return;}for(const Ciudad&c:ciudades)cout<<"- "<<c.nombre<<"\n";}
     void mostrarRutas()const{
